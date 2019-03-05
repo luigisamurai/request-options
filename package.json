@@ -1,12 +1,15 @@
 {
-  "name": "request-options",
-  "version": "1.0.0-2",
+  "name": "@luigisamurai/request-options",
+  "version": "0.0.0",
   "description": "Help to build the request options to request promises library",
   "main": "dist/src/index.js",
   "typings": "./dist/declarations/src/index.d.ts",
   "files": [
     "dist"
   ],
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
     "lint": "tslint -c tslint.json '**/*Test.ts'",
     "clean": "rm -rf ./dist",
@@ -18,12 +21,12 @@
     "type": "git",
     "url": "git+https://github.com/luigisamurai/request-options.git"
   },
+  "author": "labs.sistemas@gmail.com",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/luigisamurai/request-options/issues"
   },
   "homepage": "https://github.com/luigisamurai/request-options#readme",
-  "author": "labs.sistemas@gmail.com",
-  "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
