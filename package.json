@@ -1,6 +1,6 @@
 {
   "name": "@labs/request-options",
-  "version": "1.0.0-3",
+  "version": "1.0.0-4",
   "description": "Help to build the request options to request promises library",
   "main": "./dist/src/index.js",
   "typings": "./dist/declarations/src/index.d.ts",
