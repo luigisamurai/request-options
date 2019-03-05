@@ -1,8 +1,8 @@
 {
   "name": "@labs/request-options",
-  "version": "1.0.0-4",
+  "version": "1.0.0",
   "description": "Help to build the request options to request promises library",
-  "main": "dist/src/index.js",
+  "main": "./dist/src/index.js",
   "typings": "./dist/declarations/src/index.d.ts",
   "files": [
     "dist"
@@ -21,8 +21,8 @@
     "type": "git",
     "url": "git+https://github.com/luigisamurai/request-options.git"
   },
-  "author": "labs.sistemas@gmail.com",
-  "license": "ISC",
+  "author": "Luis Alberto Bolaños Salazar <labs.sistemas@gmail.com>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/luigisamurai/request-options/issues"
   },
