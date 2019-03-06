@@ -15,9 +15,9 @@ npm install --save @luigisamurai/request-parameters
 ## Use
 
 ```javascript
-const Request = require('@luigisamurai/request-parameters');
+const RequestParameters = require('@luigisamurai/request-parameters');
 
-const request = new Request();
+const request = new RequestParameters.Request();
 
 // request-promises options
 const setting = {
@@ -34,15 +34,15 @@ request.setParameters({
 // Get request with request-parameter dependency
 const getPromise = request.send({
   method: 'get',
-  urlParams: { homeId: 1 }
-  queryParams: { offset: 0, limit: 100 }
+  urlParams: { homeId: 1 },
+  queryParams: { offset: 0, limit: 100 },
   uri: '/home/{homeId}'
 });
 
 // Also can use async - await to wait the promises
 getPromise.then((response) => {
-  const statusCode = getResponse.statusCode;
-  const body = getResponse.body;
+  const statusCode = response.statusCode;
+  const body = response.body;
 
   console.log(statusCode, ' ', body);
 });
@@ -50,19 +50,19 @@ getPromise.then((response) => {
 // Post request with request-parameter dependency
 const postPromise = request.send({
   method: 'post',
-  headers: { 'Content-Type': 'application/json' }
-  uri: '/home'
+  headers: { 'Content-Type': 'application/json' },
+  uri: '/home',
   body: { name: 'home view' }
 });
 
 postPromise.then((response) => {
-  const statusCode = getResponse.statusCode;
-  const body = getResponse.body;
+  const statusCode = response.statusCode;
+  const body = response.body;
 
   console.log(statusCode, ' ', body);
 });
 
-// the URIs don't exist so the request return 404 or 5xx status code.
+// Note the URIs don't exist so the request return 404 status code.
 ```
 
 ## Parameters configuration
@@ -82,7 +82,6 @@ You can specify the following parameters
 
 ### Settings
 
-- json?: boolean
 - resolveWithFullResponse?: boolean
 - simple?: boolean
 - transform?: () => any
