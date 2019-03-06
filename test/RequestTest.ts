@@ -1,12 +1,14 @@
 
 import { expect } from 'chai';
-import RequestOptions from '../src/RequestOptions';
+import { OK } from 'http-status-codes';
+import Setting from '../src/interfaces/Setting';
+import Request from '../src/Request';
 
 describe('Given a default options with base url', () => {
   const baseUrl: string = 'https://www.google.com';
-  const optionsWithBaseUrl: RequestOptions = new RequestOptions()
-    .setDefault({ baseUrl })
-    .addHeaders({'Content-Type': 'application/json'});
+  const headers: any = { 'Content-Type': 'application/json' };
+  const optionsWithBaseUrl: Request = new Request()
+    .setParameters({ baseUrl, headers });
 
   describe('when it invokes build with Base URL and Header options', () => {
     let basicQuery: any;
@@ -21,16 +23,16 @@ describe('Given a default options with base url', () => {
     });
 
     it('and the default options should have only Base URL', () => {
-      expect(optionsWithBaseUrl.Options.baseUrl).to.equal(baseUrl);
-      expect(optionsWithBaseUrl.Options.headers).to.deep.equal({'Content-Type': 'application/json'});
-      expect(optionsWithBaseUrl.Options.uri).to.equal(undefined);
-      expect(optionsWithBaseUrl.Options.method).to.equal(undefined);
-      expect(optionsWithBaseUrl.Options.body).to.equal(undefined);
-      expect(optionsWithBaseUrl.Options.form).to.equal(undefined);
-      expect(optionsWithBaseUrl.Options.formData).to.equal(undefined);
-      expect(optionsWithBaseUrl.Options.queryParams).to.equal(undefined);
-      expect(optionsWithBaseUrl.Options.urlParams).to.equal(undefined);
-      expect(optionsWithBaseUrl.Options.setting).to.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.baseUrl).to.equal(baseUrl);
+      expect(optionsWithBaseUrl.Parameters.headers).to.deep.equal({'Content-Type': 'application/json'});
+      expect(optionsWithBaseUrl.Parameters.uri).to.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.method).to.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.body).to.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.form).to.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.formData).to.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.queryParams).to.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.urlParams).to.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.setting).to.equal(undefined);
     });
   });
 
@@ -51,21 +53,21 @@ describe('Given a default options with base url', () => {
       expect(cloneQuery.method).to.equal('head');
     });
 
-    it('and the options should have Base Url, URL params and query Params', () => {
+    it('and the options should have Base Url, URL Params and query Params', () => {
       const expectedHeader: any = {
         'Authorization': 'Bearer 12345',
         'Content-Type': 'application/json'
       };
-      expect(cloneFromOptionsWithBaseUrl.Options.baseUrl).to.equal(baseUrl);
-      expect(cloneFromOptionsWithBaseUrl.Options.queryParams).to.deep.equal({ limit: 5, offset: 0 });
-      expect(cloneFromOptionsWithBaseUrl.Options.urlParams).to.deep.equal({ viewId: 1 });
-      expect(cloneFromOptionsWithBaseUrl.Options.headers).to.deep.equal(expectedHeader);
-      expect(cloneFromOptionsWithBaseUrl.Options.uri).to.equal(undefined);
-      expect(cloneFromOptionsWithBaseUrl.Options.method).to.equal(undefined);
-      expect(cloneFromOptionsWithBaseUrl.Options.body).to.equal(undefined);
-      expect(cloneFromOptionsWithBaseUrl.Options.form).to.equal(undefined);
-      expect(cloneFromOptionsWithBaseUrl.Options.formData).to.equal(undefined);
-      expect(cloneFromOptionsWithBaseUrl.Options.setting).to.equal(undefined);
+      expect(cloneFromOptionsWithBaseUrl.Parameters.baseUrl).to.equal(baseUrl);
+      expect(cloneFromOptionsWithBaseUrl.Parameters.queryParams).to.deep.equal({ limit: 5, offset: 0 });
+      expect(cloneFromOptionsWithBaseUrl.Parameters.urlParams).to.deep.equal({ viewId: 1 });
+      expect(cloneFromOptionsWithBaseUrl.Parameters.headers).to.deep.equal(expectedHeader);
+      expect(cloneFromOptionsWithBaseUrl.Parameters.uri).to.equal(undefined);
+      expect(cloneFromOptionsWithBaseUrl.Parameters.method).to.equal(undefined);
+      expect(cloneFromOptionsWithBaseUrl.Parameters.body).to.equal(undefined);
+      expect(cloneFromOptionsWithBaseUrl.Parameters.form).to.equal(undefined);
+      expect(cloneFromOptionsWithBaseUrl.Parameters.formData).to.equal(undefined);
+      expect(cloneFromOptionsWithBaseUrl.Parameters.setting).to.equal(undefined);
     });
   });
 
@@ -84,20 +86,46 @@ describe('Given a default options with base url', () => {
       expect(postQuery.body).to.deep.equal({ name: 'firstView' });
     });
 
-    it('and the options should have Base Url, URL params and query Params', () => {
+    it('and the options should have Base Url, URL Params and query Params', () => {
       const expectedHeader: any = {
         'Content-Type': 'application/json'
       };
-      expect(optionsWithBaseUrl.Options.baseUrl).to.equal(baseUrl);
-      expect(optionsWithBaseUrl.Options.headers).to.deep.equal(expectedHeader);
-      expect(optionsWithBaseUrl.Options).to.have.property('simple', false);
-      expect(optionsWithBaseUrl.Options.queryParams).to.deep.equal(undefined);
-      expect(optionsWithBaseUrl.Options.urlParams).to.deep.equal(undefined);
-      expect(optionsWithBaseUrl.Options.uri).to.equal(undefined);
-      expect(optionsWithBaseUrl.Options.method).to.equal(undefined);
-      expect(optionsWithBaseUrl.Options.form).to.equal(undefined);
-      expect(optionsWithBaseUrl.Options.formData).to.equal(undefined);
-      expect(optionsWithBaseUrl.Options.body).to.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.baseUrl).to.equal(baseUrl);
+      expect(optionsWithBaseUrl.Parameters.headers).to.deep.equal(expectedHeader);
+      expect(optionsWithBaseUrl.Parameters).to.have.property('simple', false);
+      expect(optionsWithBaseUrl.Parameters.queryParams).to.deep.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.urlParams).to.deep.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.uri).to.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.method).to.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.form).to.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.formData).to.equal(undefined);
+      expect(optionsWithBaseUrl.Parameters.body).to.equal(undefined);
+    });
+  });
+
+  describe('when it sends a get request', () => {
+    let response: any;
+
+    before(async () => {
+      const request: Request = new Request();
+      const setting: Setting = {
+        resolveWithFullResponse: true,
+        simple: false
+      };
+
+      request.setParameters({
+        baseUrl: 'http://www.google.com',
+        setting
+      });
+
+      response = await request.send({
+        method: 'get',
+        uri: '/home'
+      });
+    });
+
+    it('then status code should be OK', () => {
+      expect(response.statusCode).to.equal(OK);
     });
   });
 });
