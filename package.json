@@ -1,15 +1,15 @@
 {
   "name": "@luigisamurai/request-parameters",
   "version": "1.0.0-13",
-  "description": "Help to build the request options to request promises library",
+  "description": "Help to configure the request parameters and to send HTTP request with the configured parameters.",
   "main": "./dist/src/index.js",
+  "directories": {
+    "test": "test"
+  },
   "typings": "./dist/declarations/src/index.d.ts",
   "files": [
     "dist"
   ],
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
     "lint": "tslint -c tslint.json '**/*Test.ts'",
     "clean": "rm -rf ./dist",
