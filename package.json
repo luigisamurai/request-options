@@ -1,5 +1,5 @@
 {
-  "name": "@luigisamurai/request-options",
+  "name": "@luigisamurai/request-parameters",
   "version": "1.0.0-7",
   "description": "Help to build the request options to request promises library",
   "main": "./dist/src/index.js",
