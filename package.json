@@ -11,10 +11,12 @@
     "dist"
   ],
   "scripts": {
+    "preinstall": "rm -rf ./node_modules",
     "lint": "tslint -c tslint.json '**/*Test.ts'",
-    "clean": "rm -rf ./dist",
-    "pretest": "npm run clean && npm run lint && tsc",
+    "build": "rm -rf ./dist && tsc",
+    "pretest": "npm run lint && npm run build",
     "test": "mocha dist/test/**/*.js",
+    "preversion": "npm run lint && npm run build",
     "postversion": "npm publish --access=public"
   },
   "repository": {
