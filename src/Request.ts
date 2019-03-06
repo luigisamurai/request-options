@@ -78,7 +78,8 @@ export default class Request {
     const form: any = baseParameters.form ? { form: baseParameters.form } : {} ;
     const formData: any = baseParameters.formData  ? { formData: baseParameters.formData } : {} ;
     const setting: any = baseParameters.setting ? baseParameters.setting : {};
-    const requestParameters: any = Object.assign({}, urlAndMethod, headers, body, form, formData, setting);
+    const json: any = { json: !Buffer.isBuffer(baseParameters.body) };
+    const requestParameters: any = Object.assign({}, urlAndMethod, headers, body, form, formData, json, setting);
 
     return requestParameters;
   }
