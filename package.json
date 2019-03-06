@@ -15,7 +15,7 @@
     "clean": "rm -rf ./dist",
     "pretest": "npm run clean && npm run lint && tsc",
     "test": "mocha dist/test/**/*.js",
-    "postversion": "npm publish --access=public"
+    "postversion": "git add package.json && git commit -m \"bump version\" && git tag ${npm_package_name}V${npm_package_version} && git push origin HEAD && git push origin $(git describe --tags) && npm publish --access=public"
   },
   "repository": {
     "type": "git",
