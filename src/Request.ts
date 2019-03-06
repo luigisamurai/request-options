@@ -62,34 +62,33 @@ export default class Request {
     return this;
   }
 
-  public clone(parameters: Parameters = {}): Request {
-    const baseParameters: Parameters = Object.assign({}, this.parameters);
-    const requestParameters: Parameters = Object.assign({}, baseParameters, parameters);
+  public clone(): Request {
+    const requestParameters: Parameters = Object.assign({}, this.parameters);
 
     return new Request(requestParameters);
   }
 
-  public build(parameters: Parameters): any {
-    const baseParameters: Parameters = Object.assign({}, this.parameters, parameters);
-    const queryParams: string = baseParameters.queryParams ? `?${stringify(baseParameters.queryParams)}` : '';
-    const baseUrl: string = baseParameters.baseUrl || '';
-    const baseUri: string = baseParameters.uri || '';
-    const uri: string = `${format(baseUri, baseParameters.urlParams)}${queryParams}`;
-    const urlAndMethod: any = { url: `${baseUrl}${uri}`, method: baseParameters.method };
+  public merge(parameters: Parameters): any {
+    const fullParameters: Parameters = Object.assign({}, this.parameters, parameters);
+    const queryParams: string = fullParameters.queryParams ? `?${stringify(fullParameters.queryParams)}` : '';
+    const baseUrl: string = fullParameters.baseUrl || '';
+    const baseUri: string = fullParameters.uri || '';
+    const uri: string = `${format(baseUri, fullParameters.urlParams)}${queryParams}`;
+    const urlAndMethod: any = { url: `${baseUrl}${uri}`, method: fullParameters.method };
 
-    const headers: any = baseParameters.headers ? { headers: baseParameters.headers } : {};
-    const body: any = baseParameters.body ? { body: baseParameters.body } : {};
-    const form: any = baseParameters.form ? { form: baseParameters.form } : {} ;
-    const formData: any = baseParameters.formData  ? { formData: baseParameters.formData } : {} ;
-    const setting: any = baseParameters.setting ? baseParameters.setting : {};
-    const json: any = { json: !Buffer.isBuffer(baseParameters.body) };
+    const headers: any = fullParameters.headers ? { headers: fullParameters.headers } : {};
+    const body: any = fullParameters.body ? { body: fullParameters.body } : {};
+    const form: any = fullParameters.form ? { form: fullParameters.form } : {} ;
+    const formData: any = fullParameters.formData  ? { formData: fullParameters.formData } : {} ;
+    const setting: any = fullParameters.setting ? fullParameters.setting : {};
+    const json: any = { json: !Buffer.isBuffer(fullParameters.body) };
     const requestParameters: any = Object.assign({}, urlAndMethod, headers, body, form, formData, json, setting);
 
     return requestParameters;
   }
 
   public send(methodParameters: Parameters): any {
-    const requestParameters: any = this.build(methodParameters);
+    const requestParameters: any = this.merge(methodParameters);
 
     return request(requestParameters);
   }

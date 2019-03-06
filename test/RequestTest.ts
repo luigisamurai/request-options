@@ -13,7 +13,7 @@ describe('Given a default options with base url', () => {
     let basicQuery: any;
 
     before(async () => {
-      basicQuery = optionsWithBaseUrl.build({ uri: '/view', method: 'get'});
+      basicQuery = optionsWithBaseUrl.merge({ uri: '/view', method: 'get'});
     });
 
     it('then built options should have to URL and method', () => {
@@ -44,7 +44,7 @@ describe('Given a default options with base url', () => {
         .addURLParams({ viewId: 1 })
         .addQueryParams({ limit: 5, offset: 0 })
         .addHeaders({ Authorization: 'Bearer 12345' });
-      cloneQuery = cloneFromOptionsWithBaseUrl.build({ uri: '/view/{viewId}', method: 'head'});
+      cloneQuery = cloneFromOptionsWithBaseUrl.merge({ uri: '/view/{viewId}', method: 'head'});
     });
 
     it('then built options should have to URL and method', () => {
@@ -76,7 +76,7 @@ describe('Given a default options with base url', () => {
     before(() => {
       postQuery = optionsWithBaseUrl
         .setting({ simple: false })
-        .build({ method: 'post', uri: '/view', body: { name: 'firstView' } });
+        .merge({ method: 'post', uri: '/view', body: { name: 'firstView' } });
     });
 
     it('then the uri, method and body should match', () => {
@@ -117,7 +117,7 @@ describe('Given a default options with base url', () => {
 
       response = await request.send({
         method: 'get',
-        uri: '/home'
+        uri: '/home',
       });
     });
 
