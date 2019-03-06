@@ -1,41 +1,52 @@
 {
-  "name": "@luigisamurai/request-options",
-  "version": "0.0.0",
-  "description": "Help to build the request options to request promises library",
-  "main": "dist/src/index.js",
+  "name": "@luigisamurai/request-parameters",
+  "version": "1.0.1",
+  "description": "Help to configure the request parameters and to send HTTP request with the configured parameters.",
+  "main": "./dist/src/index.js",
+  "directories": {
+    "test": "test"
+  },
   "typings": "./dist/declarations/src/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
+    "preinstall": "rm -rf ./node_modules",
     "lint": "tslint -c tslint.json '**/*Test.ts'",
-    "clean": "rm -rf ./dist",
-    "pretest": "npm run clean && npm run lint && tsc",
+    "build": "rm -rf ./dist && tsc",
+    "pretest": "npm run lint && npm run build",
     "test": "mocha dist/test/**/*.js",
-    "postversion": "npm publish"
+    "preversion": "npm run lint && npm run build",
+    "postversion": "npm publish --access=public"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/luigisamurai/request-options.git"
   },
+  "author": "Luis Alberto Bolaños Salazar <labs.sistemas@gmail.com>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/luigisamurai/request-options/issues"
   },
   "homepage": "https://github.com/luigisamurai/request-options#readme",
-  "author": "labs.sistemas@gmail.com",
-  "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.1.7",
+    "@types/http-status-codes": "^1.2.0",
     "@types/mocha": "^5.2.6",
     "chai": "^4.2.0",
+    "http-status-codes": "^1.3.0",
     "mocha": "^6.0.2",
     "tslint": "^5.13.1",
     "typescript": "^3.2.4"
   },
   "dependencies": {
     "@types/query-string": "^6.2.0",
+    "@types/request": "^2.48.1",
+    "@types/request-promise": "^4.1.42",
     "@types/string-template": "^1.0.2",
     "query-string": "^6.3.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
     "string-template": "^1.0.0"
   }
 }

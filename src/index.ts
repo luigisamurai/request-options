@@ -1,7 +1,9 @@
-import Options from './interfaces/Options';
-import RequestOptions from './RequestOptions';
+import Parameters from './interfaces/Parameters';
+import Setting from './interfaces/Setting';
+import Request from './Request';
 
 export {
-  Options,
-  RequestOptions
+  Request,
+  Parameters,
+  Setting
 };
