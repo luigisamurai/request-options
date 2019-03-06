@@ -1,6 +1,6 @@
 {
   "name": "@luigisamurai/request-parameters",
-  "version": "1.0.0-11",
+  "version": "1.0.0-12",
   "description": "Help to build the request options to request promises library",
   "main": "./dist/src/index.js",
   "typings": "./dist/declarations/src/index.d.ts",
