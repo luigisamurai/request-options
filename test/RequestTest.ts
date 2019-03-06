@@ -1,131 +1,103 @@
 
 import { expect } from 'chai';
-import Options from '../src/interfaces/Options';
 import RequestOptions from '../src/RequestOptions';
 
-describe('Given an basic query', () => {
+describe('Given a default options with base url', () => {
   const baseUrl: string = 'https://www.google.com';
+  const optionsWithBaseUrl: RequestOptions = new RequestOptions()
+    .setDefault({ baseUrl })
+    .addHeaders({'Content-Type': 'application/json'});
 
-  describe('when it gets the options from basic query', () => {
-    let basicQueryResponse: any;
-    let basicQuery: Options;
+  describe('when it invokes build with Base URL and Header options', () => {
+    let basicQuery: any;
 
-    before(() => {
-      basicQuery = {
-        baseUrl,
-        method: 'get',
-        uri: '/view',
-      };
-      basicQueryResponse = RequestOptions(basicQuery);
+    before(async () => {
+      basicQuery = optionsWithBaseUrl.build({ uri: '/view', method: 'get'});
     });
 
-    it('then the uri should match', () => {
-      expect(basicQueryResponse.url).to.equal(`${baseUrl}${basicQuery.uri}`);
+    it('then built options should have to URL and method', () => {
+      expect(basicQuery.url).to.equal(`${baseUrl}/view`);
+      expect(basicQuery.method).to.equal('get');
     });
 
-    it('and the method should match', () => {
-      expect(basicQueryResponse.method).to.equal(basicQuery.method);
-    });
-  });
-
-  describe('when it gets the options with URL parameters', () => {
-    let urlParamsResponse: any;
-    let urlParamsQuery: Options;
-
-    before(() => {
-      urlParamsQuery = {
-        baseUrl,
-        method: 'get',
-        uri: '/view/{viewId}',
-        urlParams: {
-          viewId: 1
-        }
-      };
-      urlParamsResponse = RequestOptions(urlParamsQuery);
-    });
-
-    it('then the uri should match', () => {
-      const expectedURL: string = `${baseUrl}/view/1`;
-      expect(urlParamsResponse.url).to.equal(expectedURL);
+    it('and the default options should have only Base URL', () => {
+      expect(optionsWithBaseUrl.Options.baseUrl).to.equal(baseUrl);
+      expect(optionsWithBaseUrl.Options.headers).to.deep.equal({'Content-Type': 'application/json'});
+      expect(optionsWithBaseUrl.Options.uri).to.equal(undefined);
+      expect(optionsWithBaseUrl.Options.method).to.equal(undefined);
+      expect(optionsWithBaseUrl.Options.body).to.equal(undefined);
+      expect(optionsWithBaseUrl.Options.form).to.equal(undefined);
+      expect(optionsWithBaseUrl.Options.formData).to.equal(undefined);
+      expect(optionsWithBaseUrl.Options.queryParams).to.equal(undefined);
+      expect(optionsWithBaseUrl.Options.urlParams).to.equal(undefined);
+      expect(optionsWithBaseUrl.Options.setting).to.equal(undefined);
     });
   });
 
-  describe('when it gets the options with Query parameters', () => {
-    let urlParamsResponse: any;
-    let urlQueryParams: Options;
+  describe('when it clones an exist RequestOptions object', () => {
+    let cloneFromOptionsWithBaseUrl: any;
+    let cloneQuery: any;
 
     before(() => {
-      urlQueryParams = {
-        baseUrl,
-        method: 'get',
-        queryParams: {
-          name: 'automationView'
-        },
-        uri: '/view',
-      };
-      urlParamsResponse = RequestOptions(urlQueryParams);
+      cloneFromOptionsWithBaseUrl = optionsWithBaseUrl.clone()
+        .addURLParams({ viewId: 1 })
+        .addQueryParams({ limit: 5, offset: 0 })
+        .addHeaders({ Authorization: 'Bearer 12345' });
+      cloneQuery = cloneFromOptionsWithBaseUrl.build({ uri: '/view/{viewId}', method: 'head'});
     });
 
-    it('then the URL should match', () => {
-      const expectedURL: string = `${baseUrl}${urlQueryParams.uri}?name=automationView`;
-      expect(urlParamsResponse.url).to.equal(expectedURL);
+    it('then built options should have to URL and method', () => {
+      expect(cloneQuery.url).to.equal(`${baseUrl}/view/1?limit=5&offset=0`);
+      expect(cloneQuery.method).to.equal('head');
+    });
+
+    it('and the options should have Base Url, URL params and query Params', () => {
+      const expectedHeader: any = {
+        'Authorization': 'Bearer 12345',
+        'Content-Type': 'application/json'
+      };
+      expect(cloneFromOptionsWithBaseUrl.Options.baseUrl).to.equal(baseUrl);
+      expect(cloneFromOptionsWithBaseUrl.Options.queryParams).to.deep.equal({ limit: 5, offset: 0 });
+      expect(cloneFromOptionsWithBaseUrl.Options.urlParams).to.deep.equal({ viewId: 1 });
+      expect(cloneFromOptionsWithBaseUrl.Options.headers).to.deep.equal(expectedHeader);
+      expect(cloneFromOptionsWithBaseUrl.Options.uri).to.equal(undefined);
+      expect(cloneFromOptionsWithBaseUrl.Options.method).to.equal(undefined);
+      expect(cloneFromOptionsWithBaseUrl.Options.body).to.equal(undefined);
+      expect(cloneFromOptionsWithBaseUrl.Options.form).to.equal(undefined);
+      expect(cloneFromOptionsWithBaseUrl.Options.formData).to.equal(undefined);
+      expect(cloneFromOptionsWithBaseUrl.Options.setting).to.equal(undefined);
     });
   });
 
-  describe('when it gets the options with Headers', () => {
-    let headersQueryResponse: any;
-    let headersQuery: Options;
+  describe('when it modifies optionsWithBaseUrl and it send a Post', () => {
+    let postQuery: any;
 
     before(() => {
-      headersQuery = {
-        baseUrl,
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        method: 'get',
-        uri: '/view',
+      postQuery = optionsWithBaseUrl
+        .setting({ simple: false })
+        .build({ method: 'post', uri: '/view', body: { name: 'firstView' } });
+    });
+
+    it('then the uri, method and body should match', () => {
+      expect(postQuery.url).to.equal(`${baseUrl}/view`);
+      expect(postQuery.method).to.equal('post');
+      expect(postQuery.body).to.deep.equal({ name: 'firstView' });
+    });
+
+    it('and the options should have Base Url, URL params and query Params', () => {
+      const expectedHeader: any = {
+        'Content-Type': 'application/json'
       };
-      headersQueryResponse = RequestOptions(headersQuery);
-    });
-
-    it('then the headers should match', () => {
-      expect(headersQueryResponse.headers).to.deep.equal(headersQuery.headers);
-    });
-  });
-
-  describe('when it gets the options with Request Promises Options', () => {
-    let postQueryResponse: any;
-    let postQuery: Options;
-
-    before(() => {
-      postQuery = {
-        baseUrl,
-        body: {
-          lastName: 'Data',
-          name: 'Automation'
-        },
-        json: true,
-        method: 'post',
-        resolveWithFullResponse: true,
-        simple: false,
-        uri: '/view',
-      };
-      postQueryResponse = RequestOptions(postQuery);
-    });
-
-    it('then the body should match', () => {
-      expect(postQueryResponse.body).to.deep.equal(postQueryResponse.body);
-    });
-
-    it('and the method option should be post', () => {
-      expect(postQueryResponse.method).to.equal('post');
-    });
-
-    it('and the request option should match', () => {
-      expect(postQueryResponse.json).to.equal(true);
-      expect(postQueryResponse.simple).to.equal(false);
-      expect(postQueryResponse.resolveWithFullResponse).to.equal(true);
+      expect(optionsWithBaseUrl.Options.baseUrl).to.equal(baseUrl);
+      expect(optionsWithBaseUrl.Options.headers).to.deep.equal(expectedHeader);
+      expect(optionsWithBaseUrl.Options).to.have.property('simple', false);
+      expect(optionsWithBaseUrl.Options.queryParams).to.deep.equal(undefined);
+      expect(optionsWithBaseUrl.Options.urlParams).to.deep.equal(undefined);
+      expect(optionsWithBaseUrl.Options.uri).to.equal(undefined);
+      expect(optionsWithBaseUrl.Options.method).to.equal(undefined);
+      expect(optionsWithBaseUrl.Options.form).to.equal(undefined);
+      expect(optionsWithBaseUrl.Options.formData).to.equal(undefined);
+      expect(optionsWithBaseUrl.Options.body).to.equal(undefined);
     });
   });
 });
