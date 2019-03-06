@@ -6,14 +6,18 @@ import Parameters from './interfaces/Parameters';
 export default class Request {
   private parameters: Parameters;
 
-  public setParameters(parameters: Parameters): Request {
-    this.parameters = Object.assign({}, parameters);
-
-    return this;
+  public constructor(parameters: Parameters = {}) {
+    this.parameters = parameters;
   }
 
   get Parameters(): Parameters {
     return this.parameters;
+  }
+
+  public addParameters(parameters: Parameters): Request {
+    this.parameters = Object.assign({}, this.parameters, parameters);
+
+    return this;
   }
 
   public addHeaders(headers: any): Request {
@@ -62,7 +66,7 @@ export default class Request {
     const baseParameters: Parameters = Object.assign({}, this.parameters);
     const requestParameters: Parameters = Object.assign({}, baseParameters, parameters);
 
-    return new Request().setParameters(requestParameters);
+    return new Request(requestParameters);
   }
 
   public build(parameters: Parameters): any {
@@ -71,7 +75,7 @@ export default class Request {
     const baseUrl: string = baseParameters.baseUrl || '';
     const baseUri: string = baseParameters.uri || '';
     const uri: string = `${format(baseUri, baseParameters.urlParams)}${queryParams}`;
-    const urlAndMethod: any = { url: `${baseUrl}${uri}`, method: parameters.method };
+    const urlAndMethod: any = { url: `${baseUrl}${uri}`, method: baseParameters.method };
 
     const headers: any = baseParameters.headers ? { headers: baseParameters.headers } : {};
     const body: any = baseParameters.body ? { body: baseParameters.body } : {};
@@ -84,8 +88,8 @@ export default class Request {
     return requestParameters;
   }
 
-  public send(parameters: Parameters): any {
-    const requestParameters: any = this.build(parameters);
+  public send(methodParameters: Parameters): any {
+    const requestParameters: any = this.build(methodParameters);
 
     return request(requestParameters);
   }

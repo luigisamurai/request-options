@@ -7,8 +7,7 @@ import Request from '../src/Request';
 describe('Given a default options with base url', () => {
   const baseUrl: string = 'https://www.google.com';
   const headers: any = { 'Content-Type': 'application/json' };
-  const optionsWithBaseUrl: Request = new Request()
-    .setParameters({ baseUrl, headers });
+  const optionsWithBaseUrl: Request = new Request({ baseUrl, headers });
 
   describe('when it invokes build with Base URL and Header options', () => {
     let basicQuery: any;
@@ -107,13 +106,11 @@ describe('Given a default options with base url', () => {
     let response: any;
 
     before(async () => {
-      const request: Request = new Request();
       const setting: Setting = {
         resolveWithFullResponse: true,
         simple: false
       };
-
-      request.setParameters({
+      const request: Request = new Request({
         baseUrl: 'http://www.google.com',
         setting
       });
