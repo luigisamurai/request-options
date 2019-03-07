@@ -1,5 +1,5 @@
 {
-  "name": "@labs/request-options",
+  "name": "@luigisamurai/request-options",
   "version": "2.0.0-3",
   "description": "Help to configure the request parameters and to send HTTP request with the configured parameters.",
   "main": "./dist/src/index.js",
