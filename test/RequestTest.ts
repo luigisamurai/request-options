@@ -1,8 +1,7 @@
 
 import { expect } from 'chai';
 import { OK } from 'http-status-codes';
-import Setting from '../src/interfaces/Setting';
-import Request from '../src/Request';
+import { Parameter, Request, Setting,  } from '../src';
 
 describe('Given a default options with base url', () => {
   const baseUrl: string = 'https://www.google.com';
@@ -36,37 +35,20 @@ describe('Given a default options with base url', () => {
   });
 
   describe('when it clones an exist RequestOptions object', () => {
-    let cloneFromOptionsWithBaseUrl: any;
     let cloneQuery: any;
 
     before(() => {
-      cloneFromOptionsWithBaseUrl = optionsWithBaseUrl.clone()
-        .addURLParams({ viewId: 1 })
-        .addQueryParams({ limit: 5, offset: 0 })
-        .addHeaders({ Authorization: 'Bearer 12345' });
-      cloneQuery = cloneFromOptionsWithBaseUrl.merge({ uri: '/view/{viewId}', method: 'head'});
+      const parameters: Parameter = {
+        headers: { Authorization: 'Bearer 12345' },
+        queryParams: { limit: 5, offset: 0 },
+        urlParams: { viewId: 1 }
+      };
+      cloneQuery = optionsWithBaseUrl.merge(parameters, { uri: '/view/{viewId}', method: 'head'}, );
     });
 
     it('then built options should have to URL and method', () => {
       expect(cloneQuery.url).to.equal(`${baseUrl}/view/1?limit=5&offset=0`);
       expect(cloneQuery.method).to.equal('head');
-    });
-
-    it('and the options should have Base Url, URL Params and query Params', () => {
-      const expectedHeader: any = {
-        'Authorization': 'Bearer 12345',
-        'Content-Type': 'application/json'
-      };
-      expect(cloneFromOptionsWithBaseUrl.Parameters.baseUrl).to.equal(baseUrl);
-      expect(cloneFromOptionsWithBaseUrl.Parameters.queryParams).to.deep.equal({ limit: 5, offset: 0 });
-      expect(cloneFromOptionsWithBaseUrl.Parameters.urlParams).to.deep.equal({ viewId: 1 });
-      expect(cloneFromOptionsWithBaseUrl.Parameters.headers).to.deep.equal(expectedHeader);
-      expect(cloneFromOptionsWithBaseUrl.Parameters.uri).to.equal(undefined);
-      expect(cloneFromOptionsWithBaseUrl.Parameters.method).to.equal(undefined);
-      expect(cloneFromOptionsWithBaseUrl.Parameters.body).to.equal(undefined);
-      expect(cloneFromOptionsWithBaseUrl.Parameters.form).to.equal(undefined);
-      expect(cloneFromOptionsWithBaseUrl.Parameters.formData).to.equal(undefined);
-      expect(cloneFromOptionsWithBaseUrl.Parameters.setting).to.equal(undefined);
     });
   });
 

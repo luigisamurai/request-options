@@ -1,6 +1,6 @@
-import Setting from './Setting';
+import { Setting } from './Setting';
 
-export default interface Parameters {
+export interface Parameter {
   baseUrl?: string;
   uri?: string;
   method?: string;

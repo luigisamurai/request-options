@@ -1,20 +1,20 @@
 import { stringify } from 'query-string';
 import * as request from 'request-promise';
 import * as format from 'string-template';
-import Parameters from './interfaces/Parameters';
+import { Parameter } from './interfaces/Parameter';
 
-export default class Request {
-  private parameters: Parameters;
+export class Request {
+  private parameters: Parameter;
 
-  public constructor(parameters: Parameters = {}) {
+  public constructor(parameters: Parameter = {}) {
     this.parameters = parameters;
   }
 
-  get Parameters(): Parameters {
+  get Parameters(): Parameter {
     return this.parameters;
   }
 
-  public addParameters(parameters: Parameters): Request {
+  public addParameters(parameters: Parameter): Request {
     this.parameters = Object.assign({}, this.parameters, parameters);
 
     return this;
@@ -62,14 +62,13 @@ export default class Request {
     return this;
   }
 
-  public clone(): Request {
-    const requestParameters: Parameters = Object.assign({}, this.parameters);
+  public merge(...parameters: Parameter[]): any {
+    let fullParameters: Parameter = Object.assign({}, this.parameters);
 
-    return new Request(requestParameters);
-  }
+    for (const parameter of parameters) {
+      fullParameters = Object.assign({}, fullParameters, parameter);
+    }
 
-  public merge(parameters: Parameters): any {
-    const fullParameters: Parameters = Object.assign({}, this.parameters, parameters);
     const queryParams: string = fullParameters.queryParams ? `?${stringify(fullParameters.queryParams)}` : '';
     const baseUrl: string = fullParameters.baseUrl || '';
     const baseUri: string = fullParameters.uri || '';
@@ -87,8 +86,8 @@ export default class Request {
     return requestParameters;
   }
 
-  public send(methodParameters: Parameters): any {
-    const requestParameters: any = this.merge(methodParameters);
+  public send(...parameters: Parameter[]): any {
+    const requestParameters: any = this.merge(...parameters);
 
     return request(requestParameters);
   }

@@ -1,9 +1,9 @@
-import Parameters from './interfaces/Parameters';
-import Setting from './interfaces/Setting';
-import Request from './Request';
+import { Parameter } from './interfaces/Parameter';
+import { Setting } from './interfaces/Setting';
+import { Request } from './Request';
 
 export {
   Request,
-  Parameters,
+  Parameter,
   Setting
 };

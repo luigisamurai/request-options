@@ -1,4 +1,4 @@
-export default interface Setting {
+export interface Setting {
   resolveWithFullResponse?: boolean;
   simple?: boolean;
   transform?: () => any;
