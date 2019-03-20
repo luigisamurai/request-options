@@ -14,8 +14,23 @@ npm install --save @luigisamurai/request-parameters
 
 ## Use
 
+```json
+export default Object.freeze({
+  Get: {
+    method: 'get',
+    uri: '/home/{homeId}'
+  },
+  Post: {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    uri: '/home',
+  }
+});
+```
+
 ```javascript
 const RequestParameters = require('@luigisamurai/request-parameters');
+const JSONFile = requiere('./JSONFile');
 
 const request = new RequestParameters.Request();
 
@@ -32,11 +47,9 @@ request.setParameters({
 });
 
 // Get request with request-parameter dependency
-const getPromise = request.send({
-  method: 'get',
+const getPromise = request.send(JSONFile.GET, {
   urlParams: { homeId: 1 },
   queryParams: { offset: 0, limit: 100 },
-  uri: '/home/{homeId}'
 });
 
 // Also can use async - await to wait the promises
@@ -48,10 +61,7 @@ getPromise.then((response) => {
 });
 
 // Post request with request-parameter dependency
-const postPromise = request.send({
-  method: 'post',
-  headers: { 'Content-Type': 'application/json' },
-  uri: '/home',
+const postPromise = request.send(JSONFile.Post, {
   body: { name: 'home view' }
 });
 
