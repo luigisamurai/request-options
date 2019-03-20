@@ -14,7 +14,7 @@ npm install --save @luigisamurai/request-parameters
 
 ## Use
 
-```json
+```javascript
 export default Object.freeze({
   'Get': {
     'method': 'get',
