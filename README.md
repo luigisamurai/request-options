@@ -16,14 +16,14 @@ npm install --save @luigisamurai/request-parameters
 
 ```json
 export default Object.freeze({
-  Get: {
-    method: 'get',
-    uri: '/home/{homeId}'
+  'Get': {
+    'method': 'get',
+    'uri': '/home/{homeId}'
   },
-  Post: {
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    uri: '/home',
+  'Post': {
+    'method': 'post',
+    'headers': { 'Content-Type': 'application/json' },
+    'uri': '/home',
   }
 });
 ```
