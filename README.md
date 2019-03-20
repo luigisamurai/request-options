@@ -13,6 +13,7 @@ npm install --save @luigisamurai/request-parameters
 ```
 
 ## Use
+JSONFILE (it contains the static endpoint definition)
 
 ```javascript
 export default Object.freeze({
